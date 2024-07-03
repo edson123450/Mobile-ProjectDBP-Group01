@@ -6,11 +6,8 @@ import Register from '../screens/Register';
 import Login from '../screens/Login';
 import ClientHomeScreen from '../screens/ClientHomeScreen';
 import WorkerHomeScreen from '../screens/WorkerHomeScreen';
-/*import Register from '../screens/Register';
-import Login from '../screens/Login';
-import HomeScreen from '../screens/HomeScreen';
-import ActivityScreen from '../screens/ActivityScreen';
-import Profile from '../screens/Profile';*/
+import AgregarServicio from '../screens/AgregarServicio';
+import WorkerProfile from '../screens/WorkerProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,6 +22,8 @@ const AppNavigation = () => {
         <Stack.Screen name="Register" options={{ headerShown: false }} component={Register} />
         <Stack.Screen name="ClientHomeScreen" options={{ headerShown: false }} component={ClientHomeScreen} />
         <Stack.Screen name="WorkerHomeScreen" options={{ headerShown: false }} component={WorkerHomeScreen} />
+        <Stack.Screen name="AgregarServicio" options={{ headerShown: false }} component={AgregarServicio} />
+        <Stack.Screen name="WorkerProfile" options={{ headerShown: false }} component={WorkerProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -2,7 +2,8 @@ import axios from "axios";
 import * as SecureStore from 'expo-secure-store'
 import {jwtDecode} from 'jwt-decode'
 
-const BACKEND_URL='http://3.95.187.149:8080'
+//const BACKEND_URL='http://3.95.187.149:8080'
+const BACKEND_URL = 'http://192.168.1.35:8080';
 
 
 export const getRoleBasedOnToken=async ()=>{
@@ -48,4 +49,40 @@ export const fetchRegister=async(body)=>{
         throw error;
     }
 
+}
+
+export const fetchPostService=async (body)=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+
+        const response=await axios.post(`${BACKEND_URL}/servicio`,body,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+                'Content-Type':'application/json',
+            },
+        });
+        if (response.status===201){
+            return response.status;
+        }
+    }catch(error){
+        console.error('fetchPostService failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchGetWorkerMe=async()=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/worker/me`,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
+        }
+    }catch(error){
+        console.error('fetchGetWorkerMe axios failed: ',error);
+        throw error;
+    }
 }
