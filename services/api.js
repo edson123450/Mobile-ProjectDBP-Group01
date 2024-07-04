@@ -86,3 +86,21 @@ export const fetchGetWorkerMe=async()=>{
         throw error;
     }
 }
+
+export const fetchGetClientMe=async()=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/client/me`,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
+        }
+    }
+    catch(error){
+        console.error('fetchGetClientMe axios failed: ',error);
+        throw error;
+    }
+}
