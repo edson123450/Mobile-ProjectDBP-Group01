@@ -18,7 +18,7 @@ const AppNavigation = () => {
   
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ClientProfile">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
         <Stack.Screen name="Register" options={{ headerShown: false }} component={Register} />
         <Stack.Screen name="ClientHomeScreen" options={{ headerShown: false }} component={ClientHomeScreen} />
