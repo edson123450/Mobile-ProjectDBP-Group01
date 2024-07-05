@@ -104,3 +104,72 @@ export const fetchGetClientMe=async()=>{
         throw error;
     }
 }
+
+export const fetchGetServices=async()=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/servicio`,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
+        }
+    }catch(error){
+        console.error('fetchGetServices axios failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchGetServiceById=async(id)=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/servicio/${id}`,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
+        }
+    }
+    catch(error){
+        console.error('fetchGetServiceById axios failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchRequestService=async(id)=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.post(`${BACKEND_URL}/servicio/${id}/solicitar`,null,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        return response.status;
+    }
+    catch(error){
+        console.error('fetchRequestService axios failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchGetWorkerServices=async()=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/worker/servicio`,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
+        }
+    }
+    catch(error){
+        console.error('fetchGetWorkerServices axios failed: ',error);
+        throw error;
+    }
+}
