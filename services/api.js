@@ -173,3 +173,36 @@ export const fetchGetWorkerServices=async()=>{
         throw error;
     }
 }
+
+export const fetchUpdateService=async(id,body)=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.put(`${BACKEND_URL}/servicio/${id}`,body,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+                'Content-Type':'application/json',
+            },
+        });
+        return response.status;
+    }
+    catch(error){
+        console.error('fetchUpdateService axios failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchDeleteService=async(id)=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.delete(`${BACKEND_URL}/servicio/${id}`,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        return response.status;
+    }
+    catch(error){
+        console.error('fetchDeleteService axios failed: ',error);
+        throw error;
+    }
+}

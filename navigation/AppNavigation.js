@@ -10,6 +10,7 @@ import AgregarServicio from '../screens/AgregarServicio';
 import WorkerProfile from '../screens/WorkerProfile';
 import ClientProfile from '../screens/ClientProfile';
 import MisServicios from '../screens/MisServicios';
+import EditarServicio from '../screens/EditarServicio';
 import Servicios from '../screens/Servicios';
 import Servicio from '../screens/Servicio';
 
@@ -30,6 +31,7 @@ const AppNavigation = () => {
         <Stack.Screen name="WorkerProfile" options={{ headerShown: false }} component={WorkerProfile} />
         <Stack.Screen name="ClientProfile" options={{ headerShown: false }} component={ClientProfile} />
         <Stack.Screen name="MisServicios" options={{ headerShown: false }} component={MisServicios} />
+        <Stack.Screen name="EditarServicio" options={{ headerShown: false }} component={EditarServicio} />
         <Stack.Screen name="Servicios" options={{ headerShown: false }} component={Servicios} />
         <Stack.Screen name="Servicio" options={{ headerShown: false }} component={Servicio} />
       </Stack.Navigator>
