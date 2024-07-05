@@ -22,7 +22,7 @@ const AppNavigation = () => {
   
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="WorkerHomeScreen">
+      <Stack.Navigator initialRouteName="ClientHomeScreen">
         <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
         <Stack.Screen name="Register" options={{ headerShown: false }} component={Register} />
         <Stack.Screen name="ClientHomeScreen" options={{ headerShown: false }} component={ClientHomeScreen} />

@@ -29,27 +29,18 @@ const Servicios = () => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <TouchableOpacity onPress={async () => {
-                    const status = await fetchRequestService(id);
-                    if (status === 201) {
-                        const role=await getRoleBasedOnToken();
-                        if(role=='ROLE_CLIENT'){
-                            navigation.navigate('ClientHome');
-                        } else {
-                            navigation.navigate('WorkerHome');
-                        }
-                    }
-                }} style={styles.backButton}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                 <Text style={styles.backButtonText}>Atrás</Text>
             </TouchableOpacity>
-            {services.map(service => (
-                <TouchableOpacity
-                    key={service.id}
-                    style={styles.button}
-                    onPress={() => navigation.navigate('Servicio')}
-                >
-                    <Text style={styles.buttonText}>{service.name}</Text>
-                </TouchableOpacity>
+            {services.map((service) => (
+                console.log(service.id),
+                <View key={service.id} style={{ marginBottom: 10 }}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Servicio', { id: service.id })}>
+                        <Text style={styles.buttonText}>{service.name}</Text>
+                        <Text style={styles.buttonText}>S/.{service.price.toFixed(2)}</Text>
+                        <Text style={styles.buttonText}>{service.status}</Text>
+                    </TouchableOpacity>
+                </View>
             ))}
         </ScrollView>
     );
@@ -69,9 +60,10 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     button: {
-        width: '45%',
+        alignSelf: 'stretch',
+        width: '100%',
         backgroundColor: '#4CAF50',
-        padding: 20,
+        padding: 10,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',

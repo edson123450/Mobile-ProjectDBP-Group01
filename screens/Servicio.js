@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { fetchGetServiceById, fetchRequestService, getRoleBasedOnToken } from '../services/api';
 import { useNavigation } from '@react-navigation/native';
 
-const Servicio = () => {
+const Servicio = ({ route }) => {
     const { id } = route.params;
     const navigation = useNavigation();
     const [service, setService] = useState(null);
@@ -30,12 +30,13 @@ const Servicio = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('Servicios')} style={styles.backButton}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                 <Text style={styles.backButtonText}>Atrás</Text>
             </TouchableOpacity>
             <Text style={styles.title}>{service.name}</Text>
             <Text style={styles.description}>{service.description}</Text>
-            <Text style={styles.price}>Precio: {service.price}</Text>
+            <Text style={styles.price}>Precio: S/.{service.price.toFixed(2)}</Text>
+            <Text style={styles.status}>Estado: {service.status}</Text>
             <Text style={styles.distritos}>Distritos: {service.distritos_atiende.map(distrito => distrito.name).join(', ')}</Text>
             <TouchableOpacity
                 style={styles.button}
@@ -73,6 +74,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     price: {
+        marginBottom: 10,
+    },
+    status: {
         marginBottom: 10,
     },
     distritos: {

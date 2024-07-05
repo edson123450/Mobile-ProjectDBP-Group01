@@ -63,14 +63,17 @@ const ClientProfile = () => {
                 value={age}
                 onChangeText={setAge}
                 placeholder="Age"
+                keyboardType="numeric"
             />
             <Button title="Guardar" onPress={handleSave} />
             </>
         ) : (
             <>
-            <Text style={styles.text}>{client.firstname} {client.lastname}</Text>
-            <Text style={styles.text}>{client.age} años</Text>
-            <Button title="Editar" onPress={() => setEditing(true)} />
+            <Text style={styles.text}>Nombre: {client.firstname}</Text>
+            <Text style={styles.text}>Apellido: {client.lastname}</Text>
+            <Text style={styles.text}>Edad: {client.age}</Text>
+            <Text style={styles.text}>Rol: {client.role === 'ROLE_CLIENT' ? 'CLIENTE' : 'TRABAJADOR'}</Text>
+            <Button title="Editar Perfil" onPress={() => setEditing(true)} />
             </>
         )}
         </View>

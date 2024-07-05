@@ -72,7 +72,7 @@ const WorkerProfile = () => {
           <Text style={styles.text}>Nombre: {worker.firstname}</Text>
           <Text style={styles.text}>Apellido: {worker.lastname}</Text>
           <Text style={styles.text}>Edad: {worker.age}</Text>
-          <Text style={styles.text}>Rol: {worker.role}</Text>
+          <Text style={styles.text}>Rol: {worker.role === 'ROLE_WORKER' ? 'TRABAJADOR' : 'CLIENTE'}</Text>
           <Text style={styles.text}>Calificación Promedio: {worker.AverageRating}</Text>
           <Button title="Editar Perfil" onPress={() => setEditing(true)} />
         </>

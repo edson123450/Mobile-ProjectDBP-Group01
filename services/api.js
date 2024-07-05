@@ -73,6 +73,15 @@ export const fetchPostService=async (body)=>{
 export const fetchGetWorkerMe=async()=>{
     const token=await SecureStore.getItemAsync('token');
     try{
+        // Dummy data
+        // return {
+        //     id: 1,
+        //     firstname: 'Juan',
+        //     lastname: 'Perez',
+        //     age: 25,
+        //     role: 'ROLE_WORKER',
+        //     AverageRating: 4.5,
+        // };
         const response=await axios.get(`${BACKEND_URL}/worker/me`,{
             headers:{
                 'Authorization':`Bearer ${token}`,
@@ -90,6 +99,14 @@ export const fetchGetWorkerMe=async()=>{
 export const fetchGetClientMe=async()=>{
     const token=await SecureStore.getItemAsync('token');
     try{
+        // Dummy data
+        // return {
+        //     id: 1,
+        //     firstname: 'Juan',
+        //     lastname: 'Perez',
+        //     age: 25,
+        //     role: 'ROLE_CLIENT',
+        // };
         const response=await axios.get(`${BACKEND_URL}/client/me`,{
             headers:{
                 'Authorization':`Bearer ${token}`,
@@ -108,6 +125,27 @@ export const fetchGetClientMe=async()=>{
 export const fetchGetServices=async()=>{
     const token=await SecureStore.getItemAsync('token');
     try{
+        // Dummy data
+        // return [
+        //     {
+        //         id: 1,
+        //         name: 'Pintura de casa',
+        //         price: 100,
+        //         status: 'DISPONIBLE',
+        //     },
+        //     {
+        //         id: 2,
+        //         name: 'Corte de cabello',
+        //         price: 10,
+        //         status: 'DISPONIBLE',
+        //     },
+        //     {
+        //         id: 3,
+        //         name: 'Reparación de computadoras',
+        //         price: 50,
+        //         status: 'DISPONIBLE',
+        //     },
+        // ];
         const response=await axios.get(`${BACKEND_URL}/servicio`,{
             headers:{
                 'Authorization':`Bearer ${token}`,
@@ -125,6 +163,24 @@ export const fetchGetServices=async()=>{
 export const fetchGetServiceById=async(id)=>{
     const token=await SecureStore.getItemAsync('token');
     try{
+        // Dummy data
+        // return {
+        //     id: 1,
+        //     name: 'Pintura de casa',
+        //     description: 'Pintura de casa de 2 pisos con 3 habitaciones',
+        //     price: 100,
+        //     status: 'DISPONIBLE',
+        //     distritos_atiende: [
+        //         {
+        //             id: 1,
+        //             name: 'San Miguel',
+        //         },
+        //         {
+        //             id: 2,
+        //             name: 'Magdalena',
+        //         },
+        //     ],
+        // };
         const response=await axios.get(`${BACKEND_URL}/servicio/${id}`,{
             headers:{
                 'Authorization':`Bearer ${token}`,
