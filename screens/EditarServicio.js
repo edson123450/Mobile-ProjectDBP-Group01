@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { fetchUpdateService, fetchGetServiceById } from '../services/api';
 import { useNavigation } from '@react-navigation/native';
 
-const EditarServicio = () => {
+const EditarServicio = ({ route }) => {
     const { id } = route.params;
     const navigation = useNavigation();
     const [service, setService] = useState(null);

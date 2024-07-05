@@ -35,7 +35,9 @@ const MisServicios = () => {
                     <Text style={styles.description}>{service.description}</Text>
                     <Text style={styles.price}>Precio: {service.price}</Text>
                     <Text style={styles.distritos}>Distritos: {service.distritos_atiende.map(distrito => distrito.name).join(', ')}</Text>
+                    <View style={{ height: 10 }} />
                     <Button title="Editar" onPress={() => navigation.navigate('EditarServicio', { id: service.id })} />
+                    <View style={{ height: 10 }} />
                     <Button title="Eliminar" onPress={() => {
                         Alert.alert(
                             "Confirmar eliminación",

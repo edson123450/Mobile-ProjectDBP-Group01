@@ -33,7 +33,6 @@ const Servicios = () => {
                 <Text style={styles.backButtonText}>Atrás</Text>
             </TouchableOpacity>
             {services.map((service) => (
-                console.log(service.id),
                 <View key={service.id} style={{ marginBottom: 10 }}>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Servicio', { id: service.id })}>
                         <Text style={styles.buttonText}>{service.name}</Text>
