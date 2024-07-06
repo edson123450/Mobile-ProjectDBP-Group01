@@ -27,6 +27,7 @@ const Login=()=>{
         }
         try{
             const role=await fetchLogin(data);
+            console.log('Role: ',role);
             if(role=='ROLE_CLIENT'){
                 navigation.navigate('ClientHomeScreen');
             }else if(role=='ROLE_WORKER'){

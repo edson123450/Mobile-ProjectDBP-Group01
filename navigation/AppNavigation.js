@@ -13,6 +13,8 @@ import MisServicios from '../screens/MisServicios';
 import EditarServicio from '../screens/EditarServicio';
 import Servicios from '../screens/Servicios';
 import Servicio from '../screens/Servicio';
+import WorkerSetHorarioDeTrabajo from '../screens/WorkerSetHorarioDeTrabajo';
+import WorkerSchedules from '../screens/WorkerSchedules';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,6 +31,9 @@ const AppNavigation = () => {
         <Stack.Screen name="WorkerHomeScreen" options={{ headerShown: false }} component={WorkerHomeScreen} />
         <Stack.Screen name="AgregarServicio" options={{ headerShown: false }} component={AgregarServicio} />
         <Stack.Screen name="WorkerProfile" options={{ headerShown: false }} component={WorkerProfile} />
+        <Stack.Screen name="WorkerSetHorarioDeTrabajo" options={{ headerShown: false }} component={WorkerSetHorarioDeTrabajo} />
+        <Stack.Screen name="WorkerSchedules" options={{ headerShown: false }} component={WorkerSchedules} />
+
         <Stack.Screen name="ClientProfile" options={{ headerShown: false }} component={ClientProfile} />
         <Stack.Screen name="MisServicios" options={{ headerShown: false }} component={MisServicios} />
         <Stack.Screen name="EditarServicio" options={{ headerShown: false }} component={EditarServicio} />

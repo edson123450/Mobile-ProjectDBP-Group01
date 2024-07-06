@@ -3,34 +3,26 @@ import * as SecureStore from 'expo-secure-store'
 import {jwtDecode} from 'jwt-decode'
 
 //const BACKEND_URL='http://3.95.187.149:8080'
-const BACKEND_URL = 'http://192.168.1.35:8080';
+const BACKEND_URL = 'http://172.20.10.2:8080'; // Iphone Edson
 
-const dummyData = true;
+
 
 export const getRoleBasedOnToken=async ()=>{
-    if (dummyData){
-        return 'ROLE_WORKER';
-    } else {
-        const token=await SecureStore.getItemAsync('token');
-        const decodedToken=jwtDecode(token);
-        return decodedToken.role;
-    }
+    const token=await SecureStore.getItemAsync('token');
+    const decodedToken=jwtDecode(token);
+    return decodedToken.role;
 }
 
 export const fetchLogin=async(body)=>{
     try{
-        if (dummyData){
-            return 'ROLE_WORKER';
-        } else {
-            const response=await axios.post(`${BACKEND_URL}/auth/login`,body, {
-                headers:{
-                    'Content-Type':'application/json',
-                },
-            });
-            if(response.status===200){
-                await SecureStore.setItemAsync('token',response.data.token);
-                return getRoleBasedOnToken();
-            }
+        const response=await axios.post(`${BACKEND_URL}/auth/login`,body, {
+            headers:{
+                'Content-Type':'application/json',
+            },
+        });
+        if(response.status===200){
+            await SecureStore.setItemAsync('token',response.data.token);
+            return getRoleBasedOnToken();
         }
     }catch(error){
         console.error('Login axios failed: ',error);
@@ -40,43 +32,40 @@ export const fetchLogin=async(body)=>{
 }
 
 export const fetchRegister=async(body)=>{
+    console.log('Ver body: ',body);
     try{
-        if (dummyData){
-            return 'ROLE_WORKER';
-        } else {
-            const response=await axios.post(`${BACKEND_URL}/auth/register`,body,{
-                headers:{
-                    'Content-Type':'application/json',
-                },
-            });
-            if(response.status===201){
-                await SecureStore.setItemAsync('token',response.data.token);
-                return getRoleBasedOnToken();
-            }
+        const response=await axios.post(`${BACKEND_URL}/auth/register`,body,{
+            headers:{
+                'Content-Type':'application/json',
+            },
+        });
+        if(response.status===201){
+            await SecureStore.setItemAsync('token',response.data.token);
+            return getRoleBasedOnToken();
         }
-    } catch(error){
+
+
+    }catch(error){
         console.error('Register axios failed: ',error,body);
         throw error;
     }
+
 }
 
 export const fetchPostService=async (body)=>{
     const token=await SecureStore.getItemAsync('token');
     try{
-        if (dummyData){
-            return 201;
-        } else {
-            const response=await axios.post(`${BACKEND_URL}/servicio`,body,{
-                headers:{
-                    'Authorization':`Bearer ${token}`,
-                    'Content-Type':'application/json',
-                },
-            });
-            if (response.status===201){
-                return response.status;
-            }
+
+        const response=await axios.post(`${BACKEND_URL}/servicio`,body,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+                'Content-Type':'application/json',
+            },
+        });
+        if (response.status===201){
+            return response.status;
         }
-    } catch(error) {
+    }catch(error){
         console.error('fetchPostService failed: ',error);
         throw error;
     }
@@ -85,30 +74,116 @@ export const fetchPostService=async (body)=>{
 export const fetchGetWorkerMe=async()=>{
     const token=await SecureStore.getItemAsync('token');
     try{
-        if (dummyData){
-            return {
-                id: 1,
-                firstname: 'Juan',
-                lastname: 'Perez',
-                age: 25,
-                role: 'ROLE_WORKER',
-                AverageRating: 4.5,
-            };
-        } else {
-            const response=await axios.get(`${BACKEND_URL}/worker/me`,{
-                headers:{
-                    'Authorization':`Bearer ${token}`,
-                },
-            });
-            if(response.status===200){
-                return response.data;
-            }
+        const response=await axios.get(`${BACKEND_URL}/worker/me`,{
+            headers:{
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
         }
     }catch(error){
         console.error('fetchGetWorkerMe axios failed: ',error);
         throw error;
     }
 }
+
+export const fetchUpdateWorkerProfile=async (body)=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.patch(`${BACKEND_URL}/worker/me`,body,{
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if (response.status===200){
+            return response.data;
+        }
+    }catch(error){
+        console.error('fetchUpdateWorkerProfile failed: ',error);
+        throw error;
+    }
+}
+/*export const fetchUpdateWorkerImage=async()=>{
+    const token= await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.post
+    }catch(error){
+        console.error('fetchUpdateWorkerImage failed: ',error);
+        throw error;
+    }
+}*/
+
+export const fetchUpdateWorkerImage = async (imageUri) => {
+    const token = await SecureStore.getItemAsync('token');
+    const formData = new FormData();
+    formData.append('image', {
+      uri: imageUri,
+      name: 'profile.jpg', // Puedes cambiar el nombre y extensión según sea necesario
+      type: 'image/jpeg', // Puedes ajustar el tipo según el formato de la imagen
+    });
+  
+    try {
+      const response = await axios.patch(`${BACKEND_URL}/worker/profile-image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('fetchUpdateWorkerImage failed: ', error);
+      throw error;
+    }
+};
+
+export const fetchSetWorkerSchedule=async(body)=>{
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.post(`${BACKEND_URL}/schedule/worker/me`,body,{
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${token}`,
+
+            },
+        });
+        return response.status;
+    }catch(error){
+        console.error('fetchSetWorkerSchedule failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchGetWorkerSchedulesByDate = async (body) => {
+    const token = await SecureStore.getItemAsync('token');
+    try {
+      const response = await axios.post(`${BACKEND_URL}/schedule/worker/me/date`, body, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('fetchGetWorkerSchedulesByDate failed: ', error);
+      throw error;
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const fetchGetClientMe=async()=>{
     const token=await SecureStore.getItemAsync('token');
