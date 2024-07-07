@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store'
 import {jwtDecode} from 'jwt-decode'
 
 //const BACKEND_URL='http://3.95.187.149:8080'
+//const BACKEND_URL = 'http://192.168.1.35:8080'; // Internet Edson
 const BACKEND_URL = 'http://172.20.10.2:8080'; // Iphone Edson
 
 
@@ -210,6 +211,66 @@ export const fetchGetServicios=async()=>{
         throw error;
     }
 }
+
+
+export const fetchGetServiciosByName = async (name, page, size) => {
+    const token = await SecureStore.getItemAsync('token');
+    try {
+      const response = await axios.get(`${BACKEND_URL}/servicio/search`, {
+        params: { name, page, size },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('fetchGetServiciosByName failed: ', error);
+      throw error;
+    }
+};
+
+export const fetchGetWorkerSchedulesBySevenDays = async (workerId, fechaInicio, fechaFin) => {
+    const token = await SecureStore.getItemAsync('token');
+    try {
+      const response = await axios.get(`${BACKEND_URL}/worker/${workerId}/schedules/dates`, {
+        params: {
+          fechaInicio: fechaInicio,
+          fechaFin: fechaFin,
+        },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('fetchGetWorkerSchedulesBySevenDays failed: ', error);
+      throw error;
+    }
+};
+
+export const fetchGetWorkerServiceFinalPage = async (workerId, serviceName) => {
+    const token = await SecureStore.getItemAsync('token');
+    try {
+      const response = await axios.get(`${BACKEND_URL}/servicio/worker/${workerId}/name`, {
+        params: {
+          serviceName: serviceName,
+        },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('fetchGetWorkerServiceFinalPage failed: ', error);
+      throw error;
+    }
+};
 
 
 
