@@ -99,7 +99,7 @@ const WorkerHomeScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MisServicios')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('WorkerServicios')}>
           <Text style={styles.buttonText}>Mis Servicios</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('WorkerProfile')}>

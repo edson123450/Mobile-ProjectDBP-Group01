@@ -43,8 +43,8 @@ const WorkerSetHorarioDeTrabajo = () => {
   const handleSubmit = async () => {
     const scheduleData = {
       fecha: fecha.toISOString().split('T')[0], // Formato YYYY-MM-DD
-      hora_de_inicio: horaDeInicio.toTimeString().split(' ')[0], // Formato HH:MM:SS
-      hora_de_fin: horaDeFin.toTimeString().split(' ')[0], // Formato HH:MM:SS
+      horaDeInicio: horaDeInicio.toTimeString().split(' ')[0], // Formato HH:MM:SS
+      horaDeFin: horaDeFin.toTimeString().split(' ')[0], // Formato HH:MM:SS
     };
 
     // Validación de la hora de inicio y fin

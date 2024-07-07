@@ -1,82 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { fetchGetServices, fetchRequestService } from '../services/api';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { fetchGetServicios } from '../services/api';
 import { useNavigation } from '@react-navigation/native';
 
 const Servicios = () => {
-    const navigation = useNavigation();
-    const [services, setServices] = useState(null);
+  const [services, setServices] = useState([]);
+  const navigation = useNavigation();
 
-    useEffect(() => {
-        const loadServices = async () => {
-            try {
-                const data = await fetchGetServices();
-                setServices(data);
-            } catch (error) {
-                console.error('Failed to load services: ', error);
-            }
-        };
-        loadServices();
-    }, []);
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetchGetServicios();
+        setServices(response);
+      } catch (error) {
+        console.error('Failed to fetch services:', error);
+      }
+    };
 
-    if (!services) {
-        return (
-            <View style={styles.container}>
-                <Text>Cargando...</Text>
-            </View>
-        );
-    }
+    fetchServices();
+  }, []);
 
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                <Text style={styles.backButtonText}>Atrás</Text>
-            </TouchableOpacity>
-            {services.map((service) => (
-                <View key={service.id} style={{ marginBottom: 10 }}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Servicio', { id: service.id })}>
-                        <Text style={styles.buttonText}>{service.name}</Text>
-                        <Text style={styles.buttonText}>S/.{service.price.toFixed(2)}</Text>
-                        <Text style={styles.buttonText}>{service.status}</Text>
-                    </TouchableOpacity>
-                </View>
-            ))}
-        </ScrollView>
-    );
+  const renderServiceItem = ({ item }) => (
+    <TouchableOpacity style={styles.serviceButton} onPress={() => navigation.navigate('ServiceDetails', { serviceName: item })}>
+      <Text style={styles.serviceButtonText}>{item}</Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Atrás</Text>
+      </TouchableOpacity>
+
+      <FlatList
+        data={services}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderServiceItem}
+        contentContainerStyle={styles.list}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 20,
-    },
-    buttonRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-        width: '80%',
-    },
-    button: {
-        alignSelf: 'stretch',
-        width: '100%',
-        backgroundColor: '#4CAF50',
-        padding: 10,
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
-    },
-    backButton: {
-        marginBottom: 20,
-    },
-    backButtonText: {
-        fontSize: 16,
-    },
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50, // Ajusta este valor para posicionar el botón de "Atrás"
+    left: 20,
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    zIndex: 1, // Asegúrate de que el botón "Atrás" esté sobre otros elementos
+  },
+  backButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  list: {
+    marginTop: 100, // Ajusta este valor para empujar la lista hacia abajo
+  },
+  serviceButton: {
+    backgroundColor: '#2196F3',
+    padding: 15,
+    borderRadius: 5,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  serviceButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
 });
 
 export default Servicios;

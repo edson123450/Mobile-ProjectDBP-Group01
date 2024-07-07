@@ -30,8 +30,16 @@ const Login=()=>{
             console.log('Role: ',role);
             if(role=='ROLE_CLIENT'){
                 navigation.navigate('ClientHomeScreen');
+                setData({
+                    email:'',
+                    password:''
+                })
             }else if(role=='ROLE_WORKER'){
                 navigation.navigate('WorkerHomeScreen');
+                setData({
+                    email:'',
+                    password:''
+                })
             }else{
                 setError('Email or Password is incorrect');
             }

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button, Alert, FlatList, TouchableOpacity } fro
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { fetchGetWorkerSchedulesByDate } from '../services/api';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment-timezone';
 
 const WorkerSchedules = () => {
   const [fecha, setFecha] = useState(new Date());
@@ -17,7 +18,9 @@ const WorkerSchedules = () => {
   };
 
   const handleBuscar = async () => {
-    const formattedDate = { fecha: fecha.toISOString().split('T')[0] };
+    // Convertir la fecha a la zona horaria de Lima antes de enviarla
+    const formattedDate = moment(fecha).tz('America/Lima').format('YYYY-MM-DD');
+    console.log("Fecha enviada al servidor: ", formattedDate);  // Verifica la fecha que estás enviando
     try {
       const response = await fetchGetWorkerSchedulesByDate(formattedDate);
       setSchedules(response);
@@ -33,8 +36,8 @@ const WorkerSchedules = () => {
   const renderScheduleItem = ({ item }) => (
     <View style={styles.scheduleItem}>
       <Text style={styles.scheduleText}>Fecha: {fecha.toDateString()}</Text>
-      <Text style={styles.scheduleText}>Hora de Inicio: {item.hora_de_inicio}</Text>
-      <Text style={styles.scheduleText}>Hora de Fin: {item.hora_de_fin}</Text>
+      <Text style={styles.scheduleText}>Hora de Inicio: {item.horaDeInicio}</Text>
+      <Text style={styles.scheduleText}>Hora de Fin: {item.horaDeFin}</Text>
     </View>
   );
 
@@ -44,29 +47,31 @@ const WorkerSchedules = () => {
         <Text style={styles.backButtonText}>Atrás</Text>
       </TouchableOpacity>
 
-      <Text style={styles.label}>Seleccionar Fecha</Text>
-      <View style={styles.row}>
-        <Text style={styles.selectedDate}>{fecha.toDateString()}</Text>
-        <Button title="Seleccionar fecha" onPress={() => setShowFechaPicker(true)} />
-      </View>
-      {showFechaPicker && (
-        <DateTimePicker
-          value={fecha}
-          mode="date"
-          display="default"
-          onChange={handleFechaChange}
-          minimumDate={new Date()} // Permitir solo fechas futuras
+      <View style={styles.content}>
+        <Text style={styles.label}>Seleccionar Fecha</Text>
+        <View style={styles.row}>
+          <Text style={styles.selectedDate}>{fecha.toDateString()}</Text>
+          <Button title="Seleccionar fecha" onPress={() => setShowFechaPicker(true)} />
+        </View>
+        {showFechaPicker && (
+          <DateTimePicker
+            value={fecha}
+            mode="date"
+            display="default"
+            onChange={handleFechaChange}
+            minimumDate={new Date()} // Permitir solo fechas futuras
+          />
+        )}
+
+        <Button title="Buscar" onPress={handleBuscar} />
+
+        <FlatList
+          data={schedules}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderScheduleItem}
+          contentContainerStyle={styles.list}
         />
-      )}
-
-      <Button title="Buscar" onPress={handleBuscar} />
-
-      <FlatList
-        data={schedules}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderScheduleItem}
-        contentContainerStyle={styles.list}
-      />
+      </View>
     </View>
   );
 };
@@ -79,7 +84,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 100, // Ajusta este valor para mover el botón hacia abajo
+    top: 120, // Ajusta este valor para posicionar el botón de "Atrás"
     left: 20,
     backgroundColor: '#4CAF50',
     padding: 10,
@@ -88,6 +93,9 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  content: {
+    marginTop: -150, // Ajusta este valor para mover el contenido hacia abajo
   },
   label: {
     fontSize: 18,

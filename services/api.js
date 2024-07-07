@@ -139,6 +139,7 @@ export const fetchUpdateWorkerImage = async (imageUri) => {
 };
 
 export const fetchSetWorkerSchedule=async(body)=>{
+    console.log(body);
     const token=await SecureStore.getItemAsync('token');
     try{
         const response=await axios.post(`${BACKEND_URL}/schedule/worker/me`,body,{
@@ -155,23 +156,79 @@ export const fetchSetWorkerSchedule=async(body)=>{
     }
 }
 
-export const fetchGetWorkerSchedulesByDate = async (body) => {
+export const fetchGetWorkerSchedulesByDate = async (fecha) => {
     const token = await SecureStore.getItemAsync('token');
+    console.log(fecha);
     try {
-      const response = await axios.post(`${BACKEND_URL}/schedule/worker/me/date`, body, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        return response.data;
-      }
-    } catch (error) {
-      console.error('fetchGetWorkerSchedulesByDate failed: ', error);
-      throw error;
+        const response = await axios.get(`${BACKEND_URL}/schedule/worker/me/date`, {
+            params: { date: fecha }, // Enviar la fecha como parámetro de consulta
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        console.log(response.data);
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error){
+        console.error('fetchGetWorkerSchedulesByDate failed: ', error);
+        throw error;
     }
-  };
+};
+
+export const fetchGetWorkerServices=async()=>{
+    const token = await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/servicio/worker`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
+        }
+    }catch(error){
+        console.error('fetchGetWorkerServices failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchGetServicios=async()=>{
+    const token = await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/servicio`,{
+            headers:{
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if(response.status===200){
+            return response.data;
+        }
+    }catch(error){
+        console.error('fetchGetWorkerServices failed: ',error);
+        throw error;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -310,7 +367,7 @@ export const fetchRequestService=async(id)=>{
     }
 }
 
-export const fetchGetWorkerServices=async()=>{
+/*export const fetchGetWorkerServices=async()=>{
     const token=await SecureStore.getItemAsync('token');
     try{
         if (dummyData){
@@ -382,7 +439,7 @@ export const fetchGetWorkerServices=async()=>{
         console.error('fetchGetWorkerServices axios failed: ',error);
         throw error;
     }
-}
+}*/
 
 export const fetchUpdateService=async(id,body)=>{
     const token=await SecureStore.getItemAsync('token');
