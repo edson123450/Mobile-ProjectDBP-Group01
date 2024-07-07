@@ -222,7 +222,7 @@ export const fetchGetServiciosByName = async (name, page, size) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-      if (response.status === 200) {
+      if (response.status === 201) {
         return response.data;
       }
     } catch (error) {

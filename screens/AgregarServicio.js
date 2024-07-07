@@ -59,6 +59,7 @@ const AgregarServicio = () => {
         setName('');
         setPrice('');
         setDistritos(['']);
+        navigation.goBack();
       }
     } catch (error) {
       console.error('No se pudo crear el servicio, failed: ', error, createServicioDTO);
