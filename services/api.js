@@ -272,6 +272,25 @@ export const fetchGetWorkerServiceFinalPage = async (workerId, serviceName) => {
     }
 };
 
+export const fetchCreateAppointment=async(body)=>{
+    console.log(body);
+    const token = await SecureStore.getItemAsync('token');
+    try {
+      const response = await axios.post(`${BACKEND_URL}/appointment`, body,{
+        headers: {
+            'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.status === 201) {
+        return response.status;
+      }
+    } catch (error) {
+      console.error('fetchCreateAppointment failed: ', error);
+      throw error;
+    }
+}
+
 
 
 

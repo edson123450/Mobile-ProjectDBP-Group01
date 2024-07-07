@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Button, Alert } from 'react-native';
-import { fetchGetWorkerServiceFinalPage, fetchGetWorkerSchedulesBySevenDays } from '../services/api';
+import { fetchGetWorkerServiceFinalPage, fetchGetWorkerSchedulesBySevenDays, fetchCreateAppointment, getRoleBasedOnToken } from '../services/api';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -11,6 +11,7 @@ const ContractWorker = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [userRole, setUserRole] = useState('');
   const navigation = useNavigation();
   const route = useRoute();
   const { workerId, serviceName } = route.params;
@@ -25,7 +26,17 @@ const ContractWorker = () => {
       }
     };
 
+    const fetchUserRole = async () => {
+      try {
+        const role = await getRoleBasedOnToken();
+        setUserRole(role);
+      } catch (error) {
+        console.error('Failed to fetch user role:', error);
+      }
+    };
+
     fetchWorkerDetails();
+    fetchUserRole();
   }, [workerId, serviceName]);
 
   const handleStartDateChange = (event, selectedDate) => {
@@ -57,12 +68,64 @@ const ContractWorker = () => {
     }
   };
 
-  const renderScheduleItem = ({ item }) => (
-    <View style={styles.scheduleItem}>
-      <Text style={styles.scheduleText}>{item.fecha}</Text>
-      <Text style={styles.scheduleText}>{item.horaDeInicio} - {item.horaDeFin}</Text>
-    </View>
-  );
+  const handleSelectService = async (schedule) => {
+    Alert.alert(
+      "Confirmación",
+      "¿Seguro que quieres reservar este servicio en este horario?",
+      [
+        {
+          text: "No",
+          style: "cancel"
+        },
+        {
+          text: "Sí",
+          onPress: async () => {
+            const body = {
+              workerId: workerId,
+              fecha: schedule.fecha, // Verificar el formato correcto
+              horaDeInicio: schedule.horaDeInicio, // Verificar el formato correcto
+              horaDeFin: schedule.horaDeFin, // Verificar el formato correcto
+              serviceName
+            };
+  
+            try {
+              console.log("Body enviado al backend:", body); // Añadir un log para verificar el body
+              const status = await fetchCreateAppointment(body);
+              if (status === 201) {
+                Alert.alert('Éxito', 'La solicitud de la cita le ha sido enviada al trabajador');
+              }
+            } catch (error) {
+              console.error('Failed to create appointment:', error);
+              if (error.response) {
+                Alert.alert('Error', error.response.data.message);
+              } else {
+                Alert.alert('Error', 'No se pudo crear la cita');
+              }
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  const renderScheduleItem = ({ item }) => {
+    if (userRole === 'ROLE_CLIENT') {
+      return (
+        <View style={styles.scheduleItemButton}>
+          <Text style={styles.scheduleText}>{item.fecha}</Text>
+          <Text style={styles.scheduleText}>{item.horaDeInicio} - {item.horaDeFin}</Text>
+          <Button title="Escoger servicio" onPress={() => handleSelectService(item)} />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.scheduleItem}>
+          <Text style={styles.scheduleText}>{item.fecha}</Text>
+          <Text style={styles.scheduleText}>{item.horaDeInicio} - {item.horaDeFin}</Text>
+        </View>
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -187,6 +250,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     marginBottom: 10,
+  },
+  scheduleItemButton: {
+    backgroundColor: '#f9f9f9',
+    padding: 15,
+    borderRadius: 5,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scheduleText: {
     fontSize: 16,
