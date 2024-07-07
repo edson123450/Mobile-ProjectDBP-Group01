@@ -222,7 +222,7 @@ export const fetchGetServiciosByName = async (name, page, size) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-      if (response.status === 201) {
+      if (response.status === 200) {
         return response.data;
       }
     } catch (error) {
@@ -292,6 +292,7 @@ export const fetchCreateAppointment=async(body)=>{
 }
 
 export const fetchGetWorkerAppointmentsByStatus = async (status, date) => {
+    console.log(status,date);
     const token = await SecureStore.getItemAsync('token');
     try {
         const response = await axios.get(`${BACKEND_URL}/appointment/worker/status`, {
@@ -310,38 +311,157 @@ export const fetchGetWorkerAppointmentsByStatus = async (status, date) => {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const fetchWorkerUpdateCitaStatus = async (appointmentId, status) => {
+    const token = await SecureStore.getItemAsync('token');
+    console.log(appointmentId, status);
+    try {
+        const response = await axios.patch(`${BACKEND_URL}/appointment/${appointmentId}/status`, null, {
+            params: { status },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('fetchWorkerUpdateCitaStatus failed: ', error);
+        throw error;
+    }
+};
 
 export const fetchGetClientMe=async()=>{
+    const token = await SecureStore.getItemAsync('token');
+    try {
+        const response = await axios.get(`${BACKEND_URL}/client/me`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('fetchGetClientMe failed: ', error);
+        throw error;
+    }
+}
+
+export const fetchUpdateClientProfile=async(body)=>{
+    console.log(body);
+    const token=await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.put(`${BACKEND_URL}/client/me`,body,{
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${token}`,
+            },
+        });
+        if (response.status===200){
+            return response.status;
+        }
+    }catch(error){
+        console.error('fetchUpdateClientProfile failed: ',error);
+        throw error;
+    }
+}
+
+export const fetchUpdateClientImage=async(imageUri)=>{
+    const token = await SecureStore.getItemAsync('token');
+    const formData = new FormData();
+    formData.append('image', {
+      uri: imageUri,
+      name: 'profile.jpg', // Puedes cambiar el nombre y extensión según sea necesario
+      type: 'image/jpeg', // Puedes ajustar el tipo según el formato de la imagen
+    });
+  
+    try {
+      const response = await axios.patch(`${BACKEND_URL}/client/profile-image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('fetchUpdateClientImage failed: ', error);
+      throw error;
+    }
+}
+
+export const fetchGetClientAppointmentsByStatus = async (status, date) => {
+    console.log(status,date);
+    const token = await SecureStore.getItemAsync('token');
+    try {
+        const response = await axios.get(`${BACKEND_URL}/appointment/client/status`, {
+            params: { status, date },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.error('fetchGetClientAppointmentsByStatus failed: ', error);
+        throw error;
+    }
+};
+
+export const fetchCreateReview=async(body)=>{
+    const token = await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.post(`${BACKEND_URL}/review`,body,{
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        if(response.status===201){
+            return response.status;
+        }
+    }catch(error){
+        console.error('fetchCreateReview failed: ',error);
+        throw error;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*export const fetchGetClientMe=async()=>{
     const token=await SecureStore.getItemAsync('token');
     try{
         if (dummyData){
@@ -366,7 +486,7 @@ export const fetchGetClientMe=async()=>{
         console.error('fetchGetClientMe axios failed: ',error);
         throw error;
     }
-}
+}*/
 
 export const fetchGetServices=async()=>{
     const token=await SecureStore.getItemAsync('token');

@@ -22,6 +22,9 @@ const ClientHomeScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.buttonRow}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ClientAppointmentsSide')}>
+          <Text style={styles.buttonText}>Citas pendientes y programadas</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>

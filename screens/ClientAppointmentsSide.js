@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, Alert, TouchableOpacity } from 'react-native';
-import { fetchGetWorkerAppointmentsByStatus, fetchWorkerUpdateCitaStatus } from '../services/api';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { fetchGetClientAppointmentsByStatus } from '../services/api';
 import { useNavigation } from '@react-navigation/native';
 
 const getCurrentDate = () => {
@@ -9,7 +9,7 @@ const getCurrentDate = () => {
   return format(now, 'yyyy-MM-dd');
 };
 
-const WorkerAppointmentsSide = () => {
+const ClientAppointmentsSide = () => {
   const [requestedAppointments, setRequestedAppointments] = useState([]);
   const [acceptedAppointments, setAcceptedAppointments] = useState([]);
   const currentDate = getCurrentDate();
@@ -17,8 +17,8 @@ const WorkerAppointmentsSide = () => {
 
   const fetchAppointments = async () => {
     try {
-      const requested = await fetchGetWorkerAppointmentsByStatus('REQUESTED', currentDate);
-      const accepted = await fetchGetWorkerAppointmentsByStatus('ACCEPTED', currentDate);
+      const requested = await fetchGetClientAppointmentsByStatus('REQUESTED', currentDate);
+      const accepted = await fetchGetClientAppointmentsByStatus('ACCEPTED', currentDate);
 
       setRequestedAppointments(requested);
       setAcceptedAppointments(accepted);
@@ -30,29 +30,6 @@ const WorkerAppointmentsSide = () => {
   useEffect(() => {
     fetchAppointments();
   }, [currentDate]);
-
-  const updateAppointmentStatus = async (appointmentId, status) => {
-    try {
-      await fetchWorkerUpdateCitaStatus(appointmentId, status);
-      Alert.alert('Éxito', `La cita ha sido ${status.toLowerCase()}`);
-      // Refresh appointments after update
-      fetchAppointments();
-    } catch (error) {
-      Alert.alert('Error', `No se pudo actualizar la cita a ${status.toLowerCase()}`);
-    }
-  };
-
-  const handleAccept = (appointmentId) => {
-    updateAppointmentStatus(appointmentId, 'ACCEPTED');
-  };
-
-  const handleReject = (appointmentId) => {
-    updateAppointmentStatus(appointmentId, 'CANCELLED');
-  };
-
-  const handleComplete = (appointmentId) => {
-    updateAppointmentStatus(appointmentId, 'COMPLETED');
-  };
 
   const renderAppointmentItem = ({ item }) => (
     <View style={styles.appointmentItem}>
@@ -69,23 +46,6 @@ const WorkerAppointmentsSide = () => {
         <Text style={styles.appointmentText}>{`Distrito: ${item.district.name}`}</Text>
         <Text style={styles.appointmentText}>{`Estado: ${item.status}`}</Text>
       </View>
-      {item.status === 'REQUESTED' && (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.actionButton} onPress={() => handleAccept(item.id)}>
-            <Text style={styles.buttonText}>Aceptar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionButton, styles.rejectButton]} onPress={() => handleReject(item.id)}>
-            <Text style={styles.buttonText}>Rechazar</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      {item.status === 'ACCEPTED' && (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.actionButton} onPress={() => handleComplete(item.id)}>
-            <Text style={styles.buttonText}>Terminado</Text>
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 
@@ -173,26 +133,6 @@ const styles = StyleSheet.create({
   appointmentText: {
     fontSize: 16,
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  actionButton: {
-    backgroundColor: '#4CAF50',
-    padding: 8,
-    borderRadius: 5,
-    flex: 1,
-    marginHorizontal: 5,
-    alignItems: 'center',
-  },
-  rejectButton: {
-    backgroundColor: '#FF6347', // Color para el botón de rechazar
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
 });
 
-export default WorkerAppointmentsSide;
+export default ClientAppointmentsSide;
