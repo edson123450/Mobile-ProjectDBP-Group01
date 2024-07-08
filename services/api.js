@@ -2,9 +2,9 @@ import axios from "axios";
 import * as SecureStore from 'expo-secure-store'
 import {jwtDecode} from 'jwt-decode'
 
-//const BACKEND_URL='http://3.95.187.149:8080'
+const BACKEND_URL='http://100.28.252.82:8080' // Public IP
 //const BACKEND_URL = 'http://192.168.1.35:8080'; // Internet Edson
-const BACKEND_URL = 'http://172.20.10.2:8080'; // Iphone Edson
+//const BACKEND_URL = 'http://172.20.10.2:8080'; // Iphone Edson
 
 
 
@@ -506,7 +506,7 @@ export const fetchGetClientAppointmentsNotReviewed=async()=>{
     }
 }*/
 
-export const fetchGetServices=async()=>{
+/*export const fetchGetServices=async()=>{
     const token=await SecureStore.getItemAsync('token');
     try{
         if (dummyData){
@@ -602,7 +602,7 @@ export const fetchRequestService=async(id)=>{
         console.error('fetchRequestService axios failed: ',error);
         throw error;
     }
-}
+}*/
 
 /*export const fetchGetWorkerServices=async()=>{
     const token=await SecureStore.getItemAsync('token');
@@ -678,7 +678,7 @@ export const fetchRequestService=async(id)=>{
     }
 }*/
 
-export const fetchUpdateService=async(id,body)=>{
+/*export const fetchUpdateService=async(id,body)=>{
     const token=await SecureStore.getItemAsync('token');
     try{
         if (dummyData){
@@ -717,4 +717,4 @@ export const fetchDeleteService=async(id)=>{
         console.error('fetchDeleteService axios failed: ',error);
         throw error;
     }
-}
+}*/
