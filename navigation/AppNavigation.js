@@ -20,6 +20,7 @@ import ServiceDetails from '../screens/ServiceDetails';
 import ContractWorker from '../screens/ContractWorker';
 import WorkerAppointmentsSide from '../screens/WorkerAppointmentsSide';
 import ClientAppointmentsSide from '../screens/ClientAppointmentsSide';
+import ClientAppointmentsNotReviewed from '../screens/ClientAppointmentsNotReviewed';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -43,6 +44,7 @@ const AppNavigation = () => {
         <Stack.Screen name="ContractWorker" options={{ headerShown: false }} component={ContractWorker} />
         <Stack.Screen name="WorkerAppointmentsSide" options={{ headerShown: false }} component={WorkerAppointmentsSide} />
         <Stack.Screen name="ClientAppointmentsSide" options={{ headerShown: false }} component={ClientAppointmentsSide} />
+        <Stack.Screen name="ClientAppointmentsNotReviewed" options={{ headerShown: false }} component={ClientAppointmentsNotReviewed} />
 
 
         <Stack.Screen name="ClientProfile" options={{ headerShown: false }} component={ClientProfile} />

@@ -430,6 +430,24 @@ export const fetchCreateReview=async(body)=>{
 
 }
 
+export const fetchGetClientAppointmentsNotReviewed=async()=>{
+    const token = await SecureStore.getItemAsync('token');
+    try{
+        const response=await axios.get(`${BACKEND_URL}/appointment/client/notreviewed`,{
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        if(response.status===200){
+            return response.data;
+        }
+    }catch(error){
+        console.error('fetchGetClientAppointmentsNotReviewed failed: ',error);
+        throw error;
+    }
+}
+
 
 
 
